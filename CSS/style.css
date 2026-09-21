@@ -1,0 +1,11 @@
+body{
+    background: cyan;
+}
+h2{
+    color: blue;
+    text-align: center;
+}
+p{
+    font-weight: 100;
+    color: brown;
+}
