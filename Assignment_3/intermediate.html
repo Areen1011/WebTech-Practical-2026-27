@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightgray;
+            margin: 0;
+            padding: 20px;
+        }
+
+        form {
+            background-color: white;
+            width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        fieldset {
+            border: 2px solid steelblue;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        legend {
+            color: darkblue;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="time"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 5px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 80px;
+        }
+
+        .options label {
+            display: inline-block;
+            font-weight: normal;
+            margin-right: 8px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin: 8px;
+        }
+
+        input[type="color"] {
+            display: block;
+            width: 50px;
+            height: 35px;
+            margin-top: 5px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        input[type="submit"],
+        input[type="reset"],
+        input[type="button"] {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: green;
+        }
+
+        input[type="reset"] {
+            background-color: orange;
+        }
+
+        input[type="button"] {
+            background-color: steelblue;
+        }
+
+        input[type="submit"]:hover {
+            background-color: darkgreen;
+        }
+
+        input[type="reset"]:hover {
+            background-color: darkorange;
+        }
+
+        input[type="button"]:hover {
+            background-color: darkblue;
+        }
+
+        @media (max-width: 550px) {
+            form {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="main-form" action="#" method="post" enctype="multipart/form-data">
+
+        <h2>Registration Form</h2>
+
+        <fieldset>
+            <legend>Personal Information</legend>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm_password">
+
+            <p id="password-message"></p>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="abc@mail.com">
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="9876543210" pattern="[0-9]{10}"
+                title="Enter a 10-digit phone number">
+
+            <label for="age">Age (18-60):</label>
+            <input type="number" id="age" name="age" min="18" max="60">
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob">
+
+            <label for="time">Appointment Time:</label>
+            <input type="time" id="time" name="time">
+
+            <label>Gender:</label>
+            <div class="options">
+                <label><input type="radio" id="male" name="gender" value="Male">Male</label>
+                <label><input type="radio" id="female" name="gender" value="Female">Female</label>
+            </div>
+
+            <label>Payment Method:</label>
+            <div class="options">
+                <label><input type="radio" id="credit-card" name="payment" value="Credit Card">Credit Card</label>
+                <label><input type="radio" id="upi" name="payment" value="UPI">UPI</label>
+                <label><input type="radio" id="cod" name="payment" value="Cash on Delivery">Cash on Delivery</label>
+            </div>
+
+            <label>Languages:</label>
+            <div class="options">
+                <label><input type="checkbox" id="english" name="language" value="English">English</label>
+                <label><input type="checkbox" id="hindi" name="language" value="Hindi">Hindi</label>
+                <label><input type="checkbox" id="french" name="language" value="French">French</label>
+                <label><input type="checkbox" id="spanish" name="language" value="Spanish">Spanish</label>
+            </div>
+
+            <label for="profession">Profession:</label>
+            <select id="profession" name="profession">
+                <option value="">Select Profession</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Developer">Developer</option>
+                <option value="Designer">Designer</option>
+            </select>
+
+            <label for="house">House Number:</label>
+            <input type="text" id="house" name="house">
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city">
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state">
+
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode">
+
+            <label for="message">About Yourself / Message:</label>
+            <textarea id="message" name="message" placeholder="Enter your details"></textarea>
+
+            <label for="picture">Profile Picture:</label>
+            <input type="file" id="picture" name="picture" accept="image/*">
+
+            <label for="pdf">Upload PDF:</label>
+            <input type="file" id="pdf" name="document" accept=".pdf">
+
+            <label for="color">Favorite Color:</label>
+            <input type="color" id="color" name="color">
+
+            <label for="rating">Experience Rating (1-10):</label>
+            <input type="range" id="rating" name="rating" min="1" max="10" value="5"
+                oninput="document.getElementById('rating-value').textContent = this.value">
+            <span id="rating-value">5</span>
+
+            <label for="readonly">Readonly Input:</label>
+            <input type="text" id="readonly" name="readonly" value="Cannot edit this text" readonly>
+
+            <label for="disabled">Disabled Input:</label>
+            <input type="text" id="disabled" value="Disabled" disabled>
+
+            <input type="hidden" id="userid" name="userid" value="101">
+
+            <label for="newsletter-name">Newsletter Name:</label>
+            <input type="text" id="newsletter-name" name="newsletter_name" placeholder="Enter your name">
+
+            <label for="newsletter-email">Newsletter Email:</label>
+            <input type="email" id="newsletter-email" name="newsletter_email" placeholder="Enter your email">
+
+            <input type="button" id="subscribe" value="Subscribe" onclick="alert('Thank you for subscribing!')">
+
+            <label>
+                <input type="checkbox" id="terms" name="terms"
+                    onchange="document.getElementById('terms-submit').disabled = !this.checked">
+                I accept the terms and conditions
+            </label>
+
+            <div class="buttons">
+                <input type="submit" id="terms-submit" value="Submit" disabled>
+                <input type="submit" id="submit-button" value="Submit Form">
+                <input type="reset" id="reset-button" value="Reset Form">
+                <input type="button" id="click-button" value="Click Me" onclick="alert('Button clicked!')">
+            </div>
+
+        </fieldset>
+
+    </form>
+
+    <script>
+        document.getElementById("main-form").addEventListener("submit", function (event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                document.getElementById("password-message").textContent =
+                    "Passwords do not match!";
+            }
+        });
+    </script>
+
+</body>
+
+</html>

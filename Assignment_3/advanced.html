@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Form Practicals</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightgray;
+            margin: 0;
+            padding: 20px;
+        }
+
+        form {
+            background-color: white;
+            width: 550px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        fieldset {
+            border: 2px solid steelblue;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        legend {
+            color: darkblue;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 5px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 80px;
+        }
+
+        .options label {
+            display: inline-block;
+            font-weight: normal;
+            margin-right: 10px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin: 8px;
+        }
+
+        input[type="color"] {
+            display: block;
+            width: 50px;
+            height: 35px;
+        }
+
+        input[type="submit"],
+        input[type="button"],
+        input[type="reset"] {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            background-color: steelblue;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: green;
+        }
+
+        input[type="reset"] {
+            background-color: orange;
+        }
+
+        input:disabled {
+            background-color: lightgray;
+            cursor: not-allowed;
+        }
+
+        .section {
+            border-bottom: 1px solid lightgray;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .message {
+            color: darkgreen;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="main-form" action="#" method="post" enctype="multipart/form-data">
+
+        <h2>Advanced Form Practicals</h2>
+
+        <fieldset>
+            <legend>Form Details</legend>
+
+            <div class="section" id="registration-section" role="group" aria-labelledby="registration-title">
+
+                <h3 id="registration-title">Registration</h3>
+
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" aria-label="Full Name" placeholder="Enter full name"
+                    pattern="[A-Za-z ]{3,50}" title="Enter at least 3 letters" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" aria-label="Email Address" placeholder="abc@mail.com"
+                    required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" aria-label="Password"
+                    pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                    title="Minimum 8 characters, one capital letter and one number" placeholder="Enter password"
+                    required>
+
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm_password" aria-label="Confirm Password"
+                    placeholder="Confirm password" required>
+
+                <label>Gender:</label>
+                <div class="options" role="group" aria-label="Gender">
+                    <label><input type="radio" id="male" name="gender" value="Male" required>Male</label>
+                    <label><input type="radio" id="female" name="gender" value="Female">Female</label>
+                    <label><input type="radio" id="other" name="gender" value="Other">Other</label>
+                </div>
+
+                <label for="country">Country:</label>
+                <select id="country" name="country" aria-label="Country" required>
+                    <option value="">Select Country</option>
+                    <option value="India">India</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="Canada">Canada</option>
+                </select>
+
+                <p id="password-message" class="message" aria-live="polite"></p>
+            </div>
+
+            <div class="section" id="password-section" role="group" aria-labelledby="password-title">
+
+                <h3 id="password-title">Password Pattern Example</h3>
+
+                <label for="pattern-password">Create Password:</label>
+                <input type="password" id="pattern-password" name="pattern_password"
+                    pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                    title="Use at least 8 characters, one capital letter and one number" placeholder="Example: Hello123"
+                    required>
+            </div>
+
+            <div class="section" id="step-section" role="group" aria-labelledby="step-title">
+
+                <h3 id="step-title">Multi-Step Form</h3>
+
+                <div id="step1">
+                    <h4>Step 1: Personal Information</h4>
+
+                    <label for="step-name">Name:</label>
+                    <input type="text" id="step-name" name="step_name" placeholder="Enter name">
+
+                    <button type="button" id="next-button" onclick="nextStep()">Next</button>
+                </div>
+
+                <div id="step2" hidden>
+                    <h4>Step 2: Contact Information</h4>
+
+                    <label for="step-email">Email:</label>
+                    <input type="email" id="step-email" name="step_email" placeholder="Enter email">
+
+                    <label for="step-phone">Phone:</label>
+                    <input type="tel" id="step-phone" name="step_phone" pattern="[0-9]{10}"
+                        placeholder="10-digit phone">
+
+                    <button type="button" id="back-button" onclick="previousStep()">Back</button>
+
+                    <button type="button" id="step-submit" onclick="finishStep()">Continue</button>
+                </div>
+
+                <div id="step3" hidden>
+                    <h4>Step 3: Submit</h4>
+                    <p>Review your details and submit the main form.</p>
+                    <button type="button" id="step-back" onclick="previousStep()">Back</button>
+                </div>
+            </div>
+
+            <div class="section" id="survey-section" role="group" aria-labelledby="survey-title">
+
+                <h3 id="survey-title">Survey</h3>
+
+                <label for="survey-name">Name:</label>
+                <input type="text" id="survey-name" name="survey_name" placeholder="Enter name">
+
+                <label>How did you hear about us?</label>
+                <div class="options">
+                    <label><input type="radio" name="source" value="Friends">Friends</label>
+                    <label><input type="radio" name="source" value="Internet">Internet</label>
+                </div>
+
+                <label>Interests:</label>
+                <div class="options">
+                    <label><input type="checkbox" name="interests" value="Sports">Sports</label>
+                    <label><input type="checkbox" name="interests" value="Technology">Technology</label>
+                    <label><input type="checkbox" name="interests" value="Music">Music</label>
+                </div>
+
+                <label for="satisfaction">Satisfaction:</label>
+                <select id="satisfaction" name="satisfaction">
+                    <option value="">Select</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                </select>
+
+                <label for="survey-message">Comments:</label>
+                <textarea id="survey-message" name="survey_message" placeholder="Write your feedback"></textarea>
+            </div>
+
+            <div class="section" id="job-section" role="group" aria-labelledby="job-title">
+
+                <h3 id="job-title">Job Application</h3>
+
+                <label for="job-name">Applicant Name:</label>
+                <input type="text" id="job-name" name="job_name">
+
+                <label for="resume">Upload Resume (PDF or DOC):</label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+            </div>
+
+            <div class="section" id="required-section" role="group" aria-labelledby="required-title">
+
+                <h3 id="required-title">Required Fields</h3>
+
+                <label for="required-name">Name:</label>
+                <input type="text" id="required-name" name="required_name" required>
+
+                <label for="required-email">Email:</label>
+                <input type="email" id="required-email" name="required_email" required>
+            </div>
+
+            <div class="section" id="accessibility-section" role="group" aria-labelledby="accessibility-title">
+
+                <h3 id="accessibility-title">Accessible Form</h3>
+
+                <label for="accessible-name">Name:</label>
+                <input type="text" id="accessible-name" name="accessible_name" aria-label="Enter your full name">
+
+                <label for="accessible-email">Email:</label>
+                <input type="email" id="accessible-email" name="accessible_email" aria-label="Enter your email address">
+
+                <label for="accessible-message">Message:</label>
+                <textarea id="accessible-message" name="accessible_message" aria-label="Enter your message"></textarea>
+            </div>
+
+            <div class="section" id="booking-section" role="group" aria-labelledby="booking-title">
+
+                <h3 id="booking-title">Booking</h3>
+
+                <label for="booking-date">Booking Date:</label>
+                <input type="date" id="booking-date" name="booking_date" required>
+            </div>
+
+            <div class="section" id="profile-section" role="group" aria-labelledby="profile-title">
+
+                <h3 id="profile-title">Profile Settings</h3>
+
+                <label for="profile-name">Name:</label>
+                <input type="text" id="profile-name" name="profile_name" placeholder="Enter name">
+
+                <label for="profile-picture">Profile Picture:</label>
+                <input type="file" id="profile-picture" name="profile_picture" accept="image/*">
+
+                <label for="theme-color">Theme Colour:</label>
+                <input type="color" id="theme-color" name="theme_color" value="#ffffff">
+
+                <button type="button" id="save-profile" onclick="saveProfile()">Save Profile</button>
+                <p id="profile-message" class="message" aria-live="polite"></p>
+            </div>
+
+            <div class="section" id="feedback-section" role="group" aria-labelledby="feedback-title">
+
+                <h3 id="feedback-title">Feedback</h3>
+
+                <label>Star Rating:</label>
+                <div class="options" role="group" aria-label="Star Rating">
+                    <label><input type="radio" name="rating" value="1" required>1 Star</label>
+                    <label><input type="radio" name="rating" value="2">2 Stars</label>
+                    <label><input type="radio" name="rating" value="3">3 Stars</label>
+                    <label><input type="radio" name="rating" value="4">4 Stars</label>
+                    <label><input type="radio" name="rating" value="5">5 Stars</label>
+                </div>
+
+                <label for="feedback-comment">Comment:</label>
+                <textarea id="feedback-comment" name="feedback_comment" placeholder="Write your feedback"></textarea>
+            </div>
+
+            <div class="buttons">
+                <input type="submit" id="submit-button" value="Submit Form">
+                <input type="reset" id="reset-button" value="Reset Form">
+            </div>
+
+        </fieldset>
+    </form>
+
+    <script>
+        function nextStep() {
+            const name = document.getElementById("step-name");
+
+            if (name.value.trim() === "") {
+                alert("Please enter your name.");
+                name.focus();
+                return;
+            }
+
+            document.getElementById("step1").hidden = true;
+            document.getElementById("step2").hidden = false;
+        }
+
+        function previousStep() {
+            if (!document.getElementById("step3").hidden) {
+                document.getElementById("step3").hidden = true;
+                document.getElementById("step2").hidden = false;
+            } else {
+                document.getElementById("step2").hidden = true;
+                document.getElementById("step1").hidden = false;
+            }
+        }
+
+        function finishStep() {
+            const email = document.getElementById("step-email");
+
+            if (!email.checkValidity() || email.value.trim() === "") {
+                email.reportValidity();
+                return;
+            }
+
+            const phone = document.getElementById("step-phone");
+
+            if (phone.value !== "" && !phone.checkValidity()) {
+                phone.reportValidity();
+                return;
+            }
+
+            document.getElementById("step2").hidden = true;
+            document.getElementById("step3").hidden = false;
+        }
+
+        const today = new Date();
+        const localToday = today.getFullYear() + "-" +
+            String(today.getMonth() + 1).padStart(2, "0") + "-" +
+            String(today.getDate()).padStart(2, "0");
+
+        document.getElementById("booking-date").min = localToday;
+
+        function saveProfile() {
+            const name = document.getElementById("profile-name").value;
+            const color = document.getElementById("theme-color").value;
+
+            document.body.style.backgroundColor = color;
+
+            document.getElementById("profile-message").textContent =
+                "Profile settings applied for " + (name || "user") + ".";
+        }
+
+        document.getElementById("main-form").addEventListener("submit", function (event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                document.getElementById("password-message").textContent =
+                    "Passwords do not match.";
+                document.getElementById("confirm-password").focus();
+            } else {
+                document.getElementById("password-message").textContent = "";
+            }
+        });
+
+        document.getElementById("main-form").addEventListener("reset", function () {
+            document.getElementById("password-message").textContent = "";
+            document.getElementById("profile-message").textContent = "";
+
+            document.getElementById("step1").hidden = false;
+            document.getElementById("step2").hidden = true;
+            document.getElementById("step3").hidden = true;
+
+            setTimeout(function () {
+                document.getElementById("booking-date").min = localToday;
+            }, 0);
+        });
+    </script>
+
+</body>
+
+</html>

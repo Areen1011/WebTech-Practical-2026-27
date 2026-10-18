@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <style>
+        .page {
+            font-family: Arial, sans-serif;
+            background-color: lightgray;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 8px;
+        }
+
+        .form-title {
+            text-align: center;
+            color: darkblue;
+        }
+
+        .form-fieldset {
+            border: 2px solid steelblue;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .form-legend {
+            color: darkblue;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .form-label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 5px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-textarea {
+            width: 100%;
+            height: 80px;
+            padding: 8px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .options {
+            margin-top: 5px;
+        }
+
+        .option-label {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: normal;
+        }
+
+        .option-input {
+            margin-right: 5px;
+        }
+
+        .color-input {
+            display: block;
+            margin-top: 5px;
+            width: 50px;
+            height: 35px;
+        }
+
+        .range-input {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .form-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            background-color: green;
+        }
+
+        .reset-button {
+            background-color: orange;
+        }
+
+        .click-button {
+            background-color: steelblue;
+        }
+
+        .submit-button:hover {
+            background-color: darkgreen;
+        }
+
+        .reset-button:hover {
+            background-color: darkorange;
+        }
+
+        .click-button:hover {
+            background-color: darkblue;
+        }
+
+        @media (max-width: 600px) {
+            .form-container {
+                width: auto;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="page">
+
+    <form id="registration-form" class="form-container" action="#" method="post" enctype="multipart/form-data">
+
+        <h2 id="form-title" class="form-title">Registration Form</h2>
+
+        <fieldset id="personal-information" class="form-fieldset">
+            <legend id="form-legend" class="form-legend">
+                Personal Information
+            </legend>
+
+            <label id="username-label" class="form-label" for="username">
+                Username:
+            </label>
+            <input type="text" id="username" class="form-input" name="username" placeholder="Enter username" required>
+
+            <label id="password-label" class="form-label" for="password">
+                Password:
+            </label>
+            <input type="password" id="password" class="form-input" name="password" placeholder="Enter password"
+                required>
+
+            <label id="firstname-label" class="form-label" for="firstname">
+                First Name:
+            </label>
+            <input type="text" id="firstname" class="form-input" name="firstname" placeholder="Enter first name"
+                required>
+
+            <label id="lastname-label" class="form-label" for="lastname">
+                Last Name:
+            </label>
+            <input type="text" id="lastname" class="form-input" name="lastname" placeholder="Enter last name">
+
+            <label id="email-label" class="form-label" for="email">
+                Email:
+            </label>
+            <input type="email" id="email" class="form-input" name="email" placeholder="example@gmail.com">
+
+            <label id="age-label" class="form-label" for="age">
+                Age:
+            </label>
+            <input type="number" id="age" class="form-input" name="age" min="1" max="120" placeholder="Enter age">
+
+            <label id="dob-label" class="form-label" for="dob">
+                Date of Birth:
+            </label>
+            <input type="date" id="dob" class="form-input" name="dob">
+
+            <label id="time-label" class="form-label" for="time">
+                Appointment Time:
+            </label>
+            <input type="time" id="time" class="form-input" name="time">
+
+            <label id="gender-label" class="form-label">
+                Gender:
+            </label>
+
+            <div id="gender-options" class="options">
+                <label id="male-label" class="option-label">
+                    <input type="radio" id="male" class="option-input" name="gender" value="Male">
+                    Male
+                </label>
+
+                <label id="female-label" class="option-label">
+                    <input type="radio" id="female" class="option-input" name="gender" value="Female">
+                    Female
+                </label>
+            </div>
+
+            <label id="hobbies-label" class="form-label">
+                Hobbies:
+            </label>
+
+            <div id="hobbies-options" class="options">
+                <label id="reading-label" class="option-label">
+                    <input type="checkbox" id="reading" class="option-input" name="hobbies" value="Reading">
+                    Reading
+                </label>
+
+                <label id="sports-label" class="option-label">
+                    <input type="checkbox" id="sports" class="option-input" name="hobbies" value="Sports">
+                    Sports
+                </label>
+
+                <label id="coding-label" class="option-label">
+                    <input type="checkbox" id="coding" class="option-input" name="hobbies" value="Coding">
+                    Coding
+                </label>
+            </div>
+
+            <label id="picture-label" class="form-label" for="picture">
+                Profile Picture:
+            </label>
+            <input type="file" id="picture" class="form-input" name="picture" accept="image/*">
+
+            <label id="country-label" class="form-label" for="country">
+                Country:
+            </label>
+
+            <select id="country" class="form-input" name="country">
+                <option id="country-default" value="">Select Country</option>
+                <option id="country-india" value="India">India</option>
+                <option id="country-america" value="America">America</option>
+                <option id="country-china" value="China">China</option>
+            </select>
+
+            <label id="address-label" class="form-label" for="address">
+                About Yourself:
+            </label>
+            <textarea id="address" class="form-textarea" name="address"
+                placeholder="Enter your address or details"></textarea>
+
+            <label id="color-label" class="form-label" for="color">
+                Favorite Color:
+            </label>
+            <input type="color" id="color" class="color-input" name="color">
+
+            <label id="rating-label" class="form-label" for="rating">
+                Volume (1-100):
+            </label>
+            <input type="range" id="rating" class="range-input" name="rating" min="1" max="100" value="50">
+
+        </fieldset>
+
+        <div id="button-container" class="button-container">
+            <input type="submit" id="submit-button" class="form-button submit-button" value="Submit">
+
+            <input type="reset" id="reset-button" class="form-button reset-button" value="Reset">
+
+            <input type="button" id="click-button" class="form-button click-button" value="Click Me">
+        </div>
+
+    </form>
+
+</body>
+
+</html>
