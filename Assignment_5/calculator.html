@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        .calculator {
+            background-color: white;
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 8px;
+            width: 85%;
+        }
+
+        button {
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <h2>Simple Calculator</h2>
+
+    <input type="number" id="num1" placeholder="Enter first number">
+
+    <select id="operator">
+        <option value="+">Addition (+)</option>
+        <option value="-">Subtraction (-)</option>
+        <option value="*">Multiplication (*)</option>
+        <option value="/">Division (/)</option>
+    </select>
+
+    <input type="number" id="num2" placeholder="Enter second number">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <h3 id="result">Result: </h3>
+</div>
+
+<script>
+    function calculate() {
+        let a = parseFloat(document.getElementById("num1").value);
+        let b = parseFloat(document.getElementById("num2").value);
+        let op = document.getElementById("operator").value;
+        let result;
+
+        if (document.getElementById("num1").value === "" ||
+            document.getElementById("num2").value === "") {
+            result = "Please enter both numbers.";
+        } else if (op == "+") {
+            result = a + b;
+        } else if (op == "-") {
+            result = a - b;
+        } else if (op == "*") {
+            result = a * b;
+        } else if (op == "/") {
+            if (b == 0) {
+                result = "Cannot divide by zero!";
+            } else {
+                result = a / b;
+            }
+        }
+
+        document.getElementById("result").innerHTML = "Result: " + result;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Programs</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        .box {
+            background-color: white;
+            margin: 20px auto;
+            padding: 15px;
+            width: 80%;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>JavaScript Programs</h1>
+
+    <div class="box">
+        <h2>Even Numbers Between 1 and 100</h2>
+        <button onclick="showEven()">Display Even Numbers</button>
+        <p id="Even"></p>
+    </div>
+
+    <div class="box">
+        <h2>Odd Numbers Between 1 and 100</h2>
+        <button onclick="showOdd()">Display Odd Numbers</button>
+        <p id="odd"></p>
+    </div>
+
+    <div class="box">
+        <h2>Prime Numbers Between 1 and 100</h2>
+        <button onclick="showPrime()">Display Prime Numbers</button>
+        <p id="prime"></p>
+    </div>
+
+    <div class="box">
+        <h2>Multiplication Tables from 1 to 30</h2>
+        <button onclick="showTables()">Display Tables</button>
+        <div id="tables"></div>
+    </div>
+
+    <script>
+        function showEven() {
+            let result = "";
+
+            for (let i = 2; i <= 100; i += 2) {
+                result += i + " ";
+            }
+
+            document.getElementById("Even").innerHTML = result;
+        }
+
+        function showOdd() {
+            let result = "";
+
+            for (let i = 1; i <= 100; i += 2) {
+                result += i + " ";
+            }
+
+            document.getElementById("odd").innerHTML = result;
+        }
+
+        function showPrime() {
+            let result = "";
+
+            for (let i = 2; i <= 100; i++) {
+                let prime = true;
+
+                for (let j = 2; j < i; j++) {
+                    if (i % j == 0) {
+                        prime = false;
+                        break;
+                    }
+                }
+
+                if (prime) {
+                    result += i + " ";
+                }
+            }
+
+            document.getElementById("prime").innerHTML = result;
+        }
+
+        function showTables() {
+            let result = "";
+
+            for (let i = 1; i <= 30; i++) {
+                result += "<h3>Table of " + i + "</h3>";
+
+                for (let j = 1; j <= 10; j++) {
+                    result += i + " x " + j + " = " + (i * j) + "<br>";
+                }
+            }
+
+            document.getElementById("tables").innerHTML = result;
+        }
+    </script>
+
+</body>
+</html>

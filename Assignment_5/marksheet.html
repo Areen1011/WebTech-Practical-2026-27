@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Marksheet</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Student Marksheet</h2>
+
+    <input type="text" id="seat" placeholder="Enter Seat Number">
+    <button onclick="showMarksheet()">Search</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    let students = {
+        "101": {
+            name: "Rahul Patil",
+            marks: [85, 78, 90, 88, 76]
+        },
+        "102": {
+            name: "Priya Sharma",
+            marks: [92, 89, 95, 87, 90]
+        },
+        "103": {
+            name: "Amit Joshi",
+            marks: [65, 70, 68, 75, 72]
+        }
+    };
+
+    function showMarksheet() {
+        let seat = document.getElementById("seat").value.trim();
+        let student = students[seat];
+
+        if (student) {
+            let subjects = ["Java", "Python", "DBMS", "HTML", "COA"];
+            let total = 0;
+            let table = "<h3>Name: " + student.name + "</h3>";
+            table += "<table><tr><th>Subject</th><th>Marks</th></tr>";
+
+            for (let i = 0; i < subjects.length; i++) {
+                table += "<tr><td>" + subjects[i] + "</td><td>" +
+                         student.marks[i] + "</td></tr>";
+                total += student.marks[i];
+            }
+
+            let percentage = (total / 500) * 100;
+            let result = percentage >= 40 ? "Pass" : "Fail";
+
+            table += "</table>";
+            table += "<p><b>Seat Number:</b> " + seat + "</p>";
+            table += "<p><b>Total Marks:</b> " + total + " / 500</p>";
+            table += "<p><b>Percentage:</b> " + percentage.toFixed(2) + "%</p>";
+            table += "<p><b>Result:</b> " + result + "</p>";
+
+            document.getElementById("result").innerHTML = table;
+        } else {
+            document.getElementById("result").innerHTML =
+                "<p style='color:red'>Student record not found!</p>";
+        }
+    }
+</script>
+
+</body>
+</html>

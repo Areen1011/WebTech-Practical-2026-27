@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+        }
+
+        form {
+            background-color: white;
+            width: 350px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<form id="registerForm">
+    <h2>Website Registration</h2>
+
+    <label>Full Name:</label>
+    <input type="text" id="name" required>
+
+    <label>Email:</label>
+    <input type="email" id="email" required>
+
+    <label>Username:</label>
+    <input type="text" id="username" required>
+
+    <label>Password:</label>
+    <input type="password" id="password" required>
+
+    <label>Confirm Password:</label>
+    <input type="password" id="confirmPassword" required>
+
+    <button type="submit">Register</button>
+    <button type="reset">Reset</button>
+
+    <p id="message"></p>
+</form>
+
+<script>
+    document.getElementById("registerForm").onsubmit = function(event) {
+        event.preventDefault();
+
+        let password = document.getElementById("password").value;
+        let confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+            document.getElementById("message").innerHTML =
+                "Passwords do not match!";
+            document.getElementById("message").style.color = "red";
+        } else {
+            document.getElementById("message").innerHTML =
+                "Registration successful!";
+            document.getElementById("message").style.color = "green";
+        }
+    };
+</script>
+
+</body>
+</html>

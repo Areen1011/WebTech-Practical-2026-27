@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Examination Form</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            margin: 20px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            width: 450px;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input, select {
+            margin: 8px 0;
+            padding: 8px;
+        }
+
+        button {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<form id="examForm">
+    <h2>Online Examination</h2>
+
+    <label>Student Name:</label><br>
+    <input type="text" id="name" required><br>
+
+    <label>Roll Number:</label><br>
+    <input type="text" id="roll" required><br>
+
+    <label>Subject:</label><br>
+    <select id="subject">
+        <option>HTML</option>
+        <option>JavaScript</option>
+        <option>Python</option>
+    </select>
+
+    <hr>
+
+    <p>1. HTML stands for:</p>
+    <input type="radio" name="q1" value="1"> Hyper Text Markup Language<br>
+    <input type="radio" name="q1" value="0"> High Text Machine Language<br>
+
+    <p>2. Which tag is used to create a paragraph?</p>
+    <input type="radio" name="q2" value="1"> &lt;p&gt;<br>
+    <input type="radio" name="q2" value="0"> &lt;h1&gt;<br>
+
+    <p>3. Which language is used to make web pages interactive?</p>
+    <input type="radio" name="q3" value="1"> JavaScript<br>
+    <input type="radio" name="q3" value="0"> HTML only<br><br>
+
+    <button type="submit">Submit Exam</button>
+    <button type="reset">Reset</button>
+
+    <h3 id="result"></h3>
+</form>
+
+<script>
+    document.getElementById("examForm").onsubmit = function(event) {
+        event.preventDefault();
+
+        let name = document.getElementById("name").value;
+        let roll = document.getElementById("roll").value;
+
+        let q1 = document.querySelector('input[name="q1"]:checked');
+        let q2 = document.querySelector('input[name="q2"]:checked');
+        let q3 = document.querySelector('input[name="q3"]:checked');
+
+        if (!q1 || !q2 || !q3) {
+            alert("Please answer all questions.");
+            return;
+        }
+
+        let score = Number(q1.value) + Number(q2.value) + Number(q3.value);
+
+        document.getElementById("result").innerHTML =
+            "Student: " + name + "<br>" +
+            "Roll Number: " + roll + "<br>" +
+            "Score: " + score + " / 3";
+    };
+</script>
+
+</body>
+</html>

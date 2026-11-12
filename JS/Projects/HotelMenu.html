@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        function calculateBill() {
+            let burger = Number(document.getElementById("burger").value)
+            let pizza = Number(document.getElementById("pizza").value);
+            let sandwich = Number(document.getElementById("sandwich").value);
+            let coffee = Number(document.getElementById("coffee").value);
+            let combo = Number(document.getElementById("combo").value);
+
+            let subtotal = burger * 80 + pizza * 200 + sandwich * 100 + coffee * 70 + combo * 130;
+
+            let discountPercent =
+                Number(document.getElementById("discount").value);
+
+            let discountAmount = subtotal * discountPercent / 100;
+
+            let total = subtotal - discountAmount;
+
+            let details = "";
+
+            if (burger > 0)
+                details += "Veg Burger x " + burger + "<br>";
+
+            if (pizza > 0)
+                details += "Pizza x " + pizza + "<br>";
+
+            if (sandwich > 0)
+                details += "Sandwich x " + sandwich + "<br>";
+
+            if (coffee > 0)
+                details += "Cold Coffee x " + coffee + "<br>";
+
+            if (combo > 0)
+                details += "Burger + Coffee Combo x " + combo + "<br>";
+
+            document.getElementById("items").innerHTML =
+                details || "No items selected";
+
+            document.getElementById("subtotal").innerText =
+                subtotal.toFixed(2);
+
+            document.getElementById("discountAmount").innerText =
+                discountAmount.toFixed(2);
+
+            document.getElementById("total").innerText =
+                total.toFixed(2);
+        }
+
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8f0;
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            background-color: brown;
+            color: white;
+            padding: 20px;
+            margin-top: 0;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .item {
+            background-color: white;
+            border: 2px solid brown;
+            border-radius: 10px;
+            padding: 15px;
+            width: 180px;
+        }
+
+        input,
+        select {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        button {
+            background-color: brown;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+
+        .bill {
+            background-color: white;
+            border: 2px dashed brown;
+            border-radius: 10px;
+            width: 300px;
+            margin: 25px auto;
+            padding: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Hotel Bakasur</h1>
+    <h2>Menu</h2>
+
+    <div class="menu">
+        <div class="item">
+            <h3>Veg Burger</h3>
+            <p>Price: ₹80</p>
+            Quantity:
+            <input type="number" id="burger" value="0" min="0">
+        </div>
+
+        <div class="item">
+            <h3>Pizza</h3>
+            <p>Price: ₹200</p>
+            Quantity:
+            <input type="number" id="pizza" value="0" min="0">
+        </div>
+
+        <div class="item">
+            <h3>Sandwich</h3>
+            <p>Price: ₹100</p>
+            Quantity:
+            <input type="number" id="sandwich" value="0" min="0">
+        </div>
+
+        <div class="item">
+            <h3>Cold Coffee</h3>
+            <p>Price: ₹70</p>
+            Quantity:
+            <input type="number" id="coffee" value="0" min="0">
+        </div>
+    </div>
+    <h2>🎁 Combo Offer</h2>
+    <p>1 Burger + 1 Cold Coffee = ₹130</p>
+
+    <label>
+        Select Combo:
+        <input type="number" id="combo" value="0" min="0">
+    </label>
+
+    <br><br>
+
+    <label>
+        Discount:
+        <select id="discount">
+            <option value="0">No Discount</option>
+            <option value="5">5%</option>
+            <option value="10">10%</option>
+            <option value="20">20%</option>
+        </select>
+    </label>
+
+    <br><br>
+
+    <button onclick="calculateBill()">Generate Bill</button>
+
+    <div class="bill">
+        <h2>🧾 Your Bill</h2>
+
+        <p id="items"></p>
+        <hr>
+
+        <p>Subtotal: ₹<span id="subtotal">0</span></p>
+        <p>Discount: ₹<span id="discountAmount">0</span></p>
+
+        <h3>Total: ₹<span id="total">0</span></h3>
+    </div>
+
+</body>
+
+</html>

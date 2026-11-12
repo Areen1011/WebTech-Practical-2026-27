@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Functions with Parameters</title>
+</head>
+<body>
+
+    <h2>Functions with Parameter Passing</h2>
+
+    <p id="result"></p>
+
+    <script>
+        function add(a, b) {
+            return a + b;
+        }
+
+        function multiply(a, b) {
+            return a * b;
+        }
+
+        let sum = add(10, 20);
+        let product = multiply(5, 4);
+
+        document.getElementById("result").innerHTML =
+            "Sum = " + sum + "<br>" +
+            "Product = " + product;
+    </script>
+
+</body>
+</html>
