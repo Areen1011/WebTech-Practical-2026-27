@@ -1,0 +1,82 @@
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #333;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+header {
+  background: #2563a6;
+  color: white;
+  padding: 22px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 25px;
+}
+
+header p {
+  font-size: 14px;
+}
+
+.payment-box {
+  background: white;
+  padding: 25px;
+  margin-top: 25px;
+  border: 1px solid #ddd;
+}
+
+.payment-box h2 {
+  margin-bottom: 22px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background: #2563a6;
+  color: white;
+  padding: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.message {
+  color: #16803c;
+  margin-top: 20px;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  margin-top: 25px;
+  font-size: 13px;
+}
