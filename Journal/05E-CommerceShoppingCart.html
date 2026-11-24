@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-Commerce Shopping Cart</title>
+</head>
+<body>
+
+    <h1>E-Commerce Shopping Cart</h1>
+
+    <h3>Search Product</h3>
+    <input type="text" id="search" placeholder="Search product">
+    <button onclick="displayProducts()">Search</button>
+
+    <h3>Category</h3>
+    <select id="category" onchange="displayProducts()">
+        <option value="All">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+    </select>
+
+    <h2>Products</h2>
+    <div id="products"></div>
+
+    <h2>Shopping Cart</h2>
+    <div id="cart"></div>
+
+    <h3>Coupon</h3>
+    <input type="text" id="coupon" placeholder="Enter SAVE10">
+    <button onclick="applyCoupon()">Apply</button>
+
+    <p id="message"></p>
+
+    <div id="total"></div>
+
+    <button onclick="generateInvoice()">Generate Invoice</button>
+
+    <div id="invoice"></div>
+
+
+    <script>
+
+        let products = [
+            {id: 1, name: "Laptop", category: "Electronics", price: 50000},
+            {id: 2, name: "Mobile", category: "Electronics", price: 20000},
+            {id: 3, name: "Shirt", category: "Clothing", price: 1000},
+            {id: 4, name: "Jeans", category: "Clothing", price: 1500},
+            {id: 5, name: "Java Book", category: "Books", price: 500},
+            {id: 6, name: "Python Book", category: "Books", price: 600}
+        ];
+
+        let cart = [];
+        let discount = 0;
+
+
+        function displayProducts() {
+
+            let search = document.getElementById("search").value.toLowerCase();
+            let category = document.getElementById("category").value;
+
+            let html = "";
+
+            for (let p of products) {
+
+                if (p.name.toLowerCase().includes(search) &&
+                    (category === "All" || p.category === category)) {
+
+                    html += `
+                        <p>
+                            ${p.name} - ₹${p.price}
+                            <button onclick="addToCart(${p.id})">Add</button>
+                        </p>
+                    `;
+                }
+            }
+
+            document.getElementById("products").innerHTML = html || "No products found";
+        }
+
+
+        function addToCart(id) {
+
+            let product = products.find(p => p.id === id);
+
+            let item = cart.find(p => p.id === id);
+
+            if (item) {
+                item.quantity++;
+            }
+            else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+
+            displayCart();
+        }
+
+
+        function displayCart() {
+
+            let html = "";
+
+            for (let item of cart) {
+
+                html += `
+                    <p>
+                        ${item.name} - ₹${item.price}
+
+                        <button onclick="changeQuantity(${item.id}, -1)">-</button>
+
+                        ${item.quantity}
+
+                        <button onclick="changeQuantity(${item.id}, 1)">+</button>
+
+                        <button onclick="removeItem(${item.id})">Remove</button>
+                    </p>
+                `;
+            }
+
+            document.getElementById("cart").innerHTML = html || "Cart is empty";
+
+            calculateTotal();
+        }
+
+
+        function changeQuantity(id, value) {
+
+            let item = cart.find(p => p.id === id);
+
+            item.quantity = item.quantity + value;
+
+            if (item.quantity <= 0) {
+                removeItem(id);
+            }
+            else {
+                displayCart();
+            }
+        }
+
+
+        function removeItem(id) {
+
+            cart = cart.filter(p => p.id !== id);
+
+            displayCart();
+        }
+
+
+        function applyCoupon() {
+
+            let code = document.getElementById("coupon").value;
+
+            if (code === "SAVE10") {
+                discount = 10;
+                document.getElementById("message").innerHTML = "10% Discount Applied";
+            }
+            else {
+                discount = 0;
+                document.getElementById("message").innerHTML = "Invalid Coupon";
+            }
+
+            calculateTotal();
+        }
+
+
+        function calculateTotal() {
+
+            let subtotal = 0;
+
+            for (let item of cart) {
+                subtotal = subtotal + item.price * item.quantity;
+            }
+
+            let discountAmount = subtotal * discount / 100;
+
+            let afterDiscount = subtotal - discountAmount;
+
+            let tax = afterDiscount * 18 / 100;
+
+            let total = afterDiscount + tax;
+
+            document.getElementById("total").innerHTML = `
+                <h3>Subtotal: ₹${subtotal}</h3>
+                <h3>Discount: ₹${discountAmount}</h3>
+                <h3>Tax: ₹${tax}</h3>
+                <h2>Final Total: ₹${total}</h2>
+            `;
+        }
+
+
+        function generateInvoice() {
+
+            if (cart.length === 0) {
+                alert("Cart is empty");
+                return;
+            }
+
+            let html = "<h2>Shopping Invoice</h2>";
+
+            html += "<table border='1' cellpadding='10'>";
+
+            html += `
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            `;
+
+            for (let item of cart) {
+
+                html += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>₹${item.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>₹${item.price * item.quantity}</td>
+                    </tr>
+                `;
+            }
+
+            html += "</table>";
+
+            document.getElementById("invoice").innerHTML = html;
+        }
+
+
+        displayProducts();
+        displayCart();
+
+    </script>
+
+</body>
+</html>

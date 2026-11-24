@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Management Dashboard</title>
+</head>
+<body>
+
+    <h1>Expense Management Dashboard</h1>
+
+    <h3>Add Transaction</h3>
+
+    Type:
+    <select id="type">
+        <option>Income</option>
+        <option>Expense</option>
+    </select>
+    <br><br>
+
+    Amount:
+    <input type="number" id="amount">
+    <br><br>
+
+    Category:
+    <select id="category">
+        <option>Salary</option>
+        <option>Food</option>
+        <option>Travel</option>
+        <option>Shopping</option>
+        <option>Education</option>
+        <option>Other</option>
+    </select>
+    <br><br>
+
+    Date:
+    <input type="date" id="date">
+    <br><br>
+
+    <button onclick="addTransaction()">Add Transaction</button>
+
+    <h3>Monthly Budget</h3>
+    <input type="number" id="budget" placeholder="Enter budget">
+    <button onclick="setBudget()">Set Budget</button>
+
+    <p id="alert"></p>
+
+    <h2>Dashboard</h2>
+    <p id="income">Monthly Income: ₹0</p>
+    <p id="expense">Monthly Expense: ₹0</p>
+    <p id="balance">Monthly Balance: ₹0</p>
+
+    <h2>Filter Transactions</h2>
+
+    From:
+    <input type="date" id="fromDate">
+
+    To:
+    <input type="date" id="toDate">
+
+    <button onclick="displayTransactions()">Filter</button>
+    <button onclick="showAll()">Show All</button>
+
+    <h2>Transaction History</h2>
+    <div id="transactions"></div>
+
+    <script>
+
+        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+        let budget = Number(localStorage.getItem("budget")) || 0;
+
+        function addTransaction() {
+
+            let type = document.getElementById("type").value;
+            let amount = Number(document.getElementById("amount").value);
+            let category = document.getElementById("category").value;
+            let date = document.getElementById("date").value;
+
+            if (amount <= 0 || date === "") {
+                alert("Enter valid amount and date");
+                return;
+            }
+
+            let transaction = {
+                type: type,
+                amount: amount,
+                category: category,
+                date: date
+            };
+
+            transactions.push(transaction);
+
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+
+            document.getElementById("amount").value = "";
+            document.getElementById("date").value = "";
+
+            displayTransactions();
+            calculateTotal();
+        }
+
+        function displayTransactions() {
+
+            let from = document.getElementById("fromDate").value;
+            let to = document.getElementById("toDate").value;
+
+            let filtered = transactions.filter(t => {
+                return (!from || t.date >= from) &&
+                       (!to || t.date <= to);
+            });
+
+            let html = "<table border='1' cellpadding='10'>";
+            html += "<tr><th>Type</th><th>Amount</th><th>Category</th><th>Date</th><th>Action</th></tr>";
+
+            for (let i = 0; i < filtered.length; i++) {
+
+                let t = filtered[i];
+                let index = transactions.indexOf(t);
+
+                html += `
+                    <tr>
+                        <td>${t.type}</td>
+                        <td>₹${t.amount}</td>
+                        <td>${t.category}</td>
+                        <td>${t.date}</td>
+                        <td><button onclick="deleteTransaction(${index})">Delete</button></td>
+                    </tr>
+                `;
+            }
+
+            html += "</table>";
+
+            document.getElementById("transactions").innerHTML =
+                filtered.length > 0 ? html : "No transactions found";
+        }
+
+        function calculateTotal() {
+
+            let income = 0;
+            let expense = 0;
+
+            let month = new Date().toISOString().slice(0, 7);
+
+            for (let t of transactions) {
+
+                if (t.date.slice(0, 7) === month) {
+
+                    if (t.type === "Income") {
+                        income += t.amount;
+                    } else {
+                        expense += t.amount;
+                    }
+                }
+            }
+
+            document.getElementById("income").innerHTML =
+                "Monthly Income: ₹" + income;
+
+            document.getElementById("expense").innerHTML =
+                "Monthly Expense: ₹" + expense;
+
+            document.getElementById("balance").innerHTML =
+                "Monthly Balance: ₹" + (income - expense);
+
+            checkBudget(expense);
+        }
+
+        function setBudget() {
+
+            budget = Number(document.getElementById("budget").value);
+
+            if (budget <= 0) {
+                alert("Enter a valid budget");
+                return;
+            }
+
+            localStorage.setItem("budget", budget);
+            calculateTotal();
+        }
+
+        function checkBudget(expense) {
+
+            if (budget === 0) {
+                document.getElementById("alert").innerHTML = "Set your monthly budget";
+            }
+            else if (expense >= budget) {
+                document.getElementById("alert").innerHTML = "Monthly budget exceeded!";
+            }
+            else if (expense >= budget * 0.8) {
+                document.getElementById("alert").innerHTML = "80% of budget used!";
+            }
+            else {
+                document.getElementById("alert").innerHTML = "Budget is under control";
+            }
+        }
+
+        function showAll() {
+
+            document.getElementById("fromDate").value = "";
+            document.getElementById("toDate").value = "";
+
+            displayTransactions();
+        }
+
+        function deleteTransaction(index) {
+
+            transactions.splice(index, 1);
+
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+
+            displayTransactions();
+            calculateTotal();
+        }
+
+        displayTransactions();
+        calculateTotal();
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+            background: #f2f2f2;
+        }
+
+        select {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        .summary {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart {
+            background: white;
+            padding: 15px;
+        }
+
+        @media(max-width: 700px) {
+            .summary, .charts {
+                display: block;
+            }
+
+            .card, .chart {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Interactive Sales Dashboard</h1>
+
+    <h3>Filters</h3>
+
+    Category:
+    <select id="category" onchange="updateDashboard()">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Clothing</option>
+        <option>Furniture</option>
+    </select>
+
+    Month:
+    <select id="month" onchange="updateDashboard()">
+        <option>All</option>
+        <option>January</option>
+        <option>February</option>
+        <option>March</option>
+        <option>April</option>
+    </select>
+
+    Region:
+    <select id="region" onchange="updateDashboard()">
+        <option>All</option>
+        <option>North</option>
+        <option>South</option>
+        <option>East</option>
+        <option>West</option>
+    </select>
+
+    <div class="summary">
+
+        <div class="card">
+            <h3>Total Sales</h3>
+            <h2 id="sales">₹0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Orders</h3>
+            <h2 id="orders">0</h2>
+        </div>
+
+        <div class="card">
+            <h3>Average Sales</h3>
+            <h2 id="average">₹0</h2>
+        </div>
+
+    </div>
+
+    <div class="charts">
+
+        <div class="chart">
+            <h3>Sales by Category</h3>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="chart">
+            <h3>Sales by Region</h3>
+            <canvas id="regionChart"></canvas>
+        </div>
+
+        <div class="chart">
+            <h3>Monthly Sales</h3>
+            <canvas id="monthChart"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+
+        let data = [
+            {category:"Electronics", month:"January", region:"North", sales:50000},
+            {category:"Clothing", month:"January", region:"South", sales:20000},
+            {category:"Furniture", month:"February", region:"East", sales:30000},
+            {category:"Electronics", month:"February", region:"West", sales:60000},
+            {category:"Clothing", month:"March", region:"North", sales:25000},
+            {category:"Furniture", month:"March", region:"South", sales:40000},
+            {category:"Electronics", month:"April", region:"East", sales:70000},
+            {category:"Clothing", month:"April", region:"West", sales:35000},
+            {category:"Furniture", month:"January", region:"North", sales:45000},
+            {category:"Electronics", month:"March", region:"South", sales:55000}
+        ];
+
+        let categoryChart;
+        let regionChart;
+        let monthChart;
+
+        function updateDashboard() {
+
+            let category = document.getElementById("category").value;
+            let month = document.getElementById("month").value;
+            let region = document.getElementById("region").value;
+
+            let filtered = [];
+
+            for (let item of data) {
+
+                if ((category === "All" || item.category === category) &&
+                    (month === "All" || item.month === month) &&
+                    (region === "All" || item.region === region)) {
+
+                    filtered.push(item);
+                }
+            }
+
+            let total = 0;
+
+            for (let item of filtered) {
+                total += item.sales;
+            }
+
+            document.getElementById("sales").innerHTML = "₹" + total;
+            document.getElementById("orders").innerHTML = filtered.length;
+
+            let average = 0;
+
+            if (filtered.length > 0) {
+                average = total / filtered.length;
+            }
+
+            document.getElementById("average").innerHTML =
+                "₹" + average.toFixed(2);
+
+            showCharts(filtered);
+        }
+
+        function showCharts(filtered) {
+
+            let categories = ["Electronics", "Clothing", "Furniture"];
+            let regions = ["North", "South", "East", "West"];
+            let months = ["January", "February", "March", "April"];
+
+            let categorySales = [0, 0, 0];
+            let regionSales = [0, 0, 0, 0];
+            let monthSales = [0, 0, 0, 0];
+
+            for (let item of filtered) {
+
+                let i = categories.indexOf(item.category);
+                categorySales[i] += item.sales;
+
+                let j = regions.indexOf(item.region);
+                regionSales[j] += item.sales;
+
+                let k = months.indexOf(item.month);
+                monthSales[k] += item.sales;
+            }
+
+            if (categoryChart) categoryChart.destroy();
+            if (regionChart) regionChart.destroy();
+            if (monthChart) monthChart.destroy();
+
+            categoryChart = new Chart(document.getElementById("categoryChart"), {
+                type: "bar",
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: "Sales",
+                        data: categorySales
+                    }]
+                }
+            });
+
+            regionChart = new Chart(document.getElementById("regionChart"), {
+                type: "pie",
+                data: {
+                    labels: regions,
+                    datasets: [{
+                        label: "Sales",
+                        data: regionSales
+                    }]
+                }
+            });
+
+            monthChart = new Chart(document.getElementById("monthChart"), {
+                type: "line",
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: "Monthly Sales",
+                        data: monthSales
+                    }]
+                }
+            });
+        }
+
+        updateDashboard();
+
+    </script>
+
+</body>
+</html>

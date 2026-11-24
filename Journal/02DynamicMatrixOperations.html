@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Matrix Operations</title>
+</head>
+<body>
+
+    <h1>Dynamic Matrix Operations</h1>
+
+    <h3>Matrix A</h3>
+    Rows: <input type="number" id="r1">
+    Columns: <input type="number" id="c1">
+
+    <h3>Matrix B</h3>
+    Rows: <input type="number" id="r2">
+    Columns: <input type="number" id="c2">
+
+    <br><br>
+
+    <button onclick="generate()">Generate Matrices</button>
+
+    <div id="inputs"></div>
+
+    <br>
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script>
+
+        // Generate input boxes
+        function generate() {
+
+            let r1 = Number(document.getElementById("r1").value);
+            let c1 = Number(document.getElementById("c1").value);
+            let r2 = Number(document.getElementById("r2").value);
+            let c2 = Number(document.getElementById("c2").value);
+
+            if (r1 < 1 || c1 < 1 || r2 < 1 || c2 < 1 ||
+                !Number.isInteger(r1) || !Number.isInteger(c1) ||
+                !Number.isInteger(r2) || !Number.isInteger(c2)) {
+                alert("Enter valid dimensions");
+                return;
+            }
+
+            let html = "<h3>Enter Matrix A</h3>";
+
+            for (let i = 0; i < r1; i++) {
+                for (let j = 0; j < c1; j++) {
+                    html += `<input type="number" id="a${i}${j}">`;
+                }
+                html += "<br>";
+            }
+
+            html += "<h3>Enter Matrix B</h3>";
+
+            for (let i = 0; i < r2; i++) {
+                for (let j = 0; j < c2; j++) {
+                    html += `<input type="number" id="b${i}${j}">`;
+                }
+                html += "<br>";
+            }
+
+            document.getElementById("inputs").innerHTML = html;
+            document.getElementById("result").innerHTML = "";
+        }
+
+
+        // Read matrix values
+        function readMatrix(r, c, name) {
+
+            let matrix = [];
+
+            for (let i = 0; i < r; i++) {
+
+                let row = [];
+
+                for (let j = 0; j < c; j++) {
+
+                    let value = document.getElementById(name + i + j).value;
+
+                    if (value === "") {
+                        alert("Enter all matrix values");
+                        return null;
+                    }
+
+                    row.push(Number(value));
+                }
+
+                matrix.push(row);
+            }
+
+            return matrix;
+        }
+
+
+        // Display matrix
+        function display(matrix) {
+
+            let html = "<table border='1' cellpadding='10'>";
+
+            for (let i = 0; i < matrix.length; i++) {
+
+                html += "<tr>";
+
+                for (let j = 0; j < matrix[i].length; j++) {
+                    html += "<td>" + matrix[i][j] + "</td>";
+                }
+
+                html += "</tr>";
+            }
+
+            html += "</table><br>";
+
+            return html;
+        }
+
+
+        // Calculate all operations
+        function calculate() {
+
+            let r1 = Number(document.getElementById("r1").value);
+            let c1 = Number(document.getElementById("c1").value);
+            let r2 = Number(document.getElementById("r2").value);
+            let c2 = Number(document.getElementById("c2").value);
+
+            let A = readMatrix(r1, c1, "a");
+            let B = readMatrix(r2, c2, "b");
+
+            if (A === null || B === null) {
+                return;
+            }
+
+            let html = "";
+
+            // Addition and Subtraction
+            if (r1 === r2 && c1 === c2) {
+
+                let add = [];
+                let sub = [];
+
+                for (let i = 0; i < r1; i++) {
+
+                    let row1 = [];
+                    let row2 = [];
+
+                    for (let j = 0; j < c1; j++) {
+
+                        row1.push(A[i][j] + B[i][j]);
+                        row2.push(A[i][j] - B[i][j]);
+
+                    }
+
+                    add.push(row1);
+                    sub.push(row2);
+                }
+
+                html += "<h3>Addition</h3>" + display(add);
+                html += "<h3>Subtraction</h3>" + display(sub);
+
+            } else {
+
+                html += "<p>Addition and Subtraction not possible</p>";
+            }
+
+
+            // Multiplication
+            if (c1 === r2) {
+
+                let mul = [];
+
+                for (let i = 0; i < r1; i++) {
+
+                    let row = [];
+
+                    for (let j = 0; j < c2; j++) {
+
+                        let sum = 0;
+
+                        for (let k = 0; k < c1; k++) {
+                            sum += A[i][k] * B[k][j];
+                        }
+
+                        row.push(sum);
+                    }
+
+                    mul.push(row);
+                }
+
+                html += "<h3>Multiplication</h3>" + display(mul);
+
+            } else {
+
+                html += "<p>Multiplication not possible</p>";
+            }
+
+
+            // Transpose of Matrix A
+            let tA = [];
+
+            for (let j = 0; j < c1; j++) {
+
+                let row = [];
+
+                for (let i = 0; i < r1; i++) {
+                    row.push(A[i][j]);
+                }
+
+                tA.push(row);
+            }
+
+            html += "<h3>Transpose of Matrix A</h3>" + display(tA);
+
+
+            // Transpose of Matrix B
+            let tB = [];
+
+            for (let j = 0; j < c2; j++) {
+
+                let row = [];
+
+                for (let i = 0; i < r2; i++) {
+                    row.push(B[i][j]);
+                }
+
+                tB.push(row);
+            }
+
+            html += "<h3>Transpose of Matrix B</h3>" + display(tB);
+
+            document.getElementById("result").innerHTML = html;
+        }
+
+    </script>
+
+</body>
+</html>

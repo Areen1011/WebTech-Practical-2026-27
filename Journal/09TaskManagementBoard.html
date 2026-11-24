@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Management Board</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+
+        .board {
+            display: flex;
+            gap: 15px;
+        }
+
+        .column {
+            width: 33%;
+            min-height: 300px;
+            padding: 15px;
+            background: #eeeeee;
+        }
+
+        .task {
+            background: white;
+            padding: 10px;
+            margin: 10px;
+            cursor: grab;
+        }
+
+        button, input, select {
+            padding: 8px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Task Management Board</h1>
+
+    <h3>Add Task</h3>
+
+    <input type="text" id="title" placeholder="Task Name">
+
+    <input type="date" id="deadline">
+
+    <select id="priority">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select>
+
+    <button onclick="addTask()">Add Task</button>
+
+    <h3>Search and Filter</h3>
+
+    <input type="text" id="search" placeholder="Search Task" oninput="displayTasks()">
+
+    <select id="filter" onchange="displayTasks()">
+        <option>All</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+    </select>
+
+    <div class="board">
+
+        <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event, 'Pending')">
+            <h2>Pending</h2>
+            <div id="Pending"></div>
+        </div>
+
+        <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event, 'In Progress')">
+            <h2>In Progress</h2>
+            <div id="In Progress"></div>
+        </div>
+
+        <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event, 'Completed')">
+            <h2>Completed</h2>
+            <div id="Completed"></div>
+        </div>
+
+    </div>
+
+    <script>
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        let editId = null;
+
+        function addTask() {
+
+            let title = document.getElementById("title").value;
+            let deadline = document.getElementById("deadline").value;
+            let priority = document.getElementById("priority").value;
+
+            if (title === "" || deadline === "") {
+                alert("Enter task name and deadline");
+                return;
+            }
+
+            if (editId === null) {
+
+                let task = {
+                    id: Date.now(),
+                    title: title,
+                    deadline: deadline,
+                    priority: priority,
+                    status: "Pending"
+                };
+
+                tasks.push(task);
+
+            } else {
+
+                let task = tasks.find(t => t.id === editId);
+
+                task.title = title;
+                task.deadline = deadline;
+                task.priority = priority;
+
+                editId = null;
+                document.getElementById("addButton").innerHTML = "Add Task";
+            }
+
+            saveTasks();
+
+            document.getElementById("title").value = "";
+            document.getElementById("deadline").value = "";
+
+            displayTasks();
+        }
+
+        function displayTasks() {
+
+            document.getElementById("Pending").innerHTML = "";
+            document.getElementById("In Progress").innerHTML = "";
+            document.getElementById("Completed").innerHTML = "";
+
+            let search = document.getElementById("search").value.toLowerCase();
+            let filter = document.getElementById("filter").value;
+
+            for (let task of tasks) {
+
+                if (!task.title.toLowerCase().includes(search)) {
+                    continue;
+                }
+
+                if (filter !== "All" && task.priority !== filter) {
+                    continue;
+                }
+
+                let div = document.createElement("div");
+
+                div.className = "task";
+                div.draggable = true;
+
+                div.ondragstart = function(event) {
+                    event.dataTransfer.setData("id", task.id);
+                };
+
+                div.innerHTML = `
+                    <h3>${task.title}</h3>
+                    <p>Priority: ${task.priority}</p>
+                    <p>Deadline: ${task.deadline}</p>
+                    <button onclick="editTask(${task.id})">Edit</button>
+                    <button onclick="deleteTask(${task.id})">Delete</button>
+                `;
+
+                document.getElementById(task.status).appendChild(div);
+            }
+        }
+
+        function editTask(id) {
+
+            let task = tasks.find(t => t.id === id);
+
+            document.getElementById("title").value = task.title;
+            document.getElementById("deadline").value = task.deadline;
+            document.getElementById("priority").value = task.priority;
+
+            editId = id;
+
+            document.getElementById("addButton").innerHTML = "Update Task";
+        }
+
+        function deleteTask(id) {
+
+            tasks = tasks.filter(t => t.id !== id);
+
+            saveTasks();
+            displayTasks();
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function dropTask(event, status) {
+
+            event.preventDefault();
+
+            let id = Number(event.dataTransfer.getData("id"));
+
+            let task = tasks.find(t => t.id === id);
+
+            if (task) {
+                task.status = status;
+            }
+
+            saveTasks();
+            displayTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        displayTasks();
+
+    </script>
+
+</body>
+</html>

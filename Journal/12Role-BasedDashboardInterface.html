@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Role Based Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+            background: #f2f2f2;
+        }
+
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            background: #333;
+            color: white;
+            padding: 20px;
+            width: 200px;
+            min-height: 300px;
+        }
+
+        .content {
+            background: white;
+            padding: 20px;
+            flex: 1;
+            min-height: 300px;
+        }
+
+        button, select {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .menu {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .menu:hover {
+            background: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Role Based Dashboard</h1>
+
+    <h3>Select User Role</h3>
+
+    <select id="role" onchange="changeRole()">
+        <option value="">Select Role</option>
+        <option value="Admin">Admin</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Student">Student</option>
+    </select>
+
+    <div class="dashboard">
+
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <div id="menu"></div>
+        </div>
+
+        <div class="content">
+            <h2 id="heading">Welcome</h2>
+            <div id="data">
+                Select a role to open dashboard.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        let currentRole = "";
+
+        let dashboardData = {
+
+            Admin: {
+                menu: ["Dashboard", "Manage Users", "Manage Faculty", "Manage Students", "Reports"],
+                message: "Welcome Admin",
+                data: {
+                    "Dashboard": "Total Users: 100",
+                    "Manage Users": "You can manage all users.",
+                    "Manage Faculty": "Total Faculty: 20",
+                    "Manage Students": "Total Students: 80",
+                    "Reports": "View college reports."
+                }
+            },
+
+            Faculty: {
+                menu: ["Dashboard", "View Students", "Attendance", "Marks"],
+                message: "Welcome Faculty",
+                data: {
+                    "Dashboard": "Faculty Dashboard",
+                    "View Students": "Student List: Rahul, Amit, Priya",
+                    "Attendance": "Manage student attendance.",
+                    "Marks": "Add and view student marks."
+                }
+            },
+
+            Student: {
+                menu: ["Dashboard", "My Profile", "My Marks", "My Attendance"],
+                message: "Welcome Student",
+                data: {
+                    "Dashboard": "Student Dashboard",
+                    "My Profile": "Name: Rahul, Course: MCA",
+                    "My Marks": "Java: 85, DBMS: 90",
+                    "My Attendance": "Attendance: 90%"
+                }
+            }
+
+        };
+
+        function changeRole() {
+
+            currentRole = document.getElementById("role").value;
+
+            if (currentRole === "") {
+                document.getElementById("menu").innerHTML = "";
+                document.getElementById("heading").innerHTML = "Welcome";
+                document.getElementById("data").innerHTML = "Select a role to open dashboard.";
+                return;
+            }
+
+            let menus = dashboardData[currentRole].menu;
+
+            let html = "";
+
+            for (let item of menus) {
+
+                html += `
+                    <div class="menu" onclick="showData('${item}')">
+                        ${item}
+                    </div>
+                `;
+            }
+
+            document.getElementById("menu").innerHTML = html;
+
+            document.getElementById("heading").innerHTML =
+                dashboardData[currentRole].message;
+
+            document.getElementById("data").innerHTML =
+                "Select an option from the menu.";
+        }
+
+        function showData(item) {
+
+            if (!currentRole) {
+                return;
+            }
+
+            let data = dashboardData[currentRole].data;
+
+            if (data[item] !== undefined) {
+
+                document.getElementById("heading").innerHTML = item;
+
+                document.getElementById("data").innerHTML = data[item];
+
+                if (currentRole === "Admin" && item === "Manage Users") {
+                    document.getElementById("data").innerHTML +=
+                        "<br><br><button onclick='alert(\"User added successfully\")'>Add User</button>";
+                }
+
+                if (currentRole === "Faculty" && item === "Attendance") {
+                    document.getElementById("data").innerHTML +=
+                        "<br><br><button onclick='alert(\"Attendance saved\")'>Save Attendance</button>";
+                }
+
+                if (currentRole === "Student" && item === "My Profile") {
+                    document.getElementById("data").innerHTML +=
+                        "<br><br><button onclick='alert(\"Students cannot edit this profile\")'>Edit Profile</button>";
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>

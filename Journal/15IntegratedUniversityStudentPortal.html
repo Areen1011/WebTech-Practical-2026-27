@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>University Student Portal</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f2f2f2;
+        }
+
+        header {
+            background: #263b60;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            background: #333;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            margin: 8px;
+            width: 250px;
+        }
+
+        .card {
+            background: #eeeeee;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid gray;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>University Student Portal</h1>
+        <p>Welcome to Student Dashboard</p>
+    </header>
+
+    <nav>
+        <button onclick="showSection('profile')">Profile</button>
+        <button onclick="showSection('exam')">Examination</button>
+        <button onclick="showSection('result')">Results</button>
+        <button onclick="showSection('fees')">Fees</button>
+        <button onclick="showSection('notifications')">Notifications</button>
+        <button onclick="showSection('form')">Form Submission</button>
+    </nav>
+
+    <div class="container">
+
+        <div id="profile" class="section">
+            <h2>Student Profile</h2>
+            <p>Name: Areen Mulani</p>
+            <p>Roll Number: 101</p>
+            <p>Course: MCA</p>
+            <p>College: IMED Pune</p>
+            <p>Email: areen@gmail.com</p>
+        </div>
+
+        <div id="exam" class="section">
+            <h2>Examination Details</h2>
+
+            <div class="card">
+                <p>Subject: Java Programming</p>
+                <p>Date: 10 December 2026</p>
+                <p>Time: 10:00 AM</p>
+            </div>
+
+            <div class="card">
+                <p>Subject: DBMS</p>
+                <p>Date: 12 December 2026</p>
+                <p>Time: 10:00 AM</p>
+            </div>
+
+            <div class="card">
+                <p>Subject: Web Technology</p>
+                <p>Date: 15 December 2026</p>
+                <p>Time: 10:00 AM</p>
+            </div>
+        </div>
+
+        <div id="result" class="section">
+            <h2>Examination Results</h2>
+
+            <table>
+                <tr>
+                    <th>Subject</th>
+                    <th>Marks</th>
+                    <th>Grade</th>
+                </tr>
+
+                <tr>
+                    <td>Java</td>
+                    <td>85</td>
+                    <td>A</td>
+                </tr>
+
+                <tr>
+                    <td>DBMS</td>
+                    <td>90</td>
+                    <td>A+</td>
+                </tr>
+
+                <tr>
+                    <td>Web Technology</td>
+                    <td>80</td>
+                    <td>A</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="fees" class="section">
+            <h2>Fee Information</h2>
+
+            <p>Total Fees: ₹80,000</p>
+            <p>Paid Fees: ₹50,000</p>
+            <p>Remaining Fees: ₹30,000</p>
+
+            <button onclick="alert('Payment successful (Demo)')">
+                Pay Fees
+            </button>
+        </div>
+
+        <div id="notifications" class="section">
+            <h2>Notifications</h2>
+
+            <p>1. Examination timetable published.</p>
+            <p>2. Submit assignments before deadline.</p>
+            <p>3. Fee payment reminder.</p>
+        </div>
+
+        <div id="form" class="section">
+            <h2>Form Submission</h2>
+
+            <form id="studentForm">
+
+                <input type="text" id="name" placeholder="Enter Name">
+                <br>
+
+                <input type="email" id="email" placeholder="Enter Email">
+                <br>
+
+                <input type="text" id="phone" placeholder="Enter Mobile Number">
+                <br>
+
+                <select id="formType">
+                    <option value="">Select Form Type</option>
+                    <option>Leave Application</option>
+                    <option>Bonafide Certificate</option>
+                    <option>Exam Revaluation</option>
+                </select>
+                <br>
+
+                <textarea id="reason" placeholder="Enter Reason"></textarea>
+                <br>
+
+                <button type="submit">Submit Form</button>
+
+            </form>
+
+            <p id="message"></p>
+
+            <h3>Submitted Forms</h3>
+            <div id="submittedForms"></div>
+        </div>
+
+    </div>
+
+    <script>
+
+        function showSection(id) {
+
+            let sections = document.getElementsByClassName("section");
+
+            for (let section of sections) {
+                section.style.display = "none";
+            }
+
+            document.getElementById(id).style.display = "block";
+        }
+
+        let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+        function displayForms() {
+
+            let html = "";
+
+            for (let form of forms) {
+
+                html += `
+                    <div class="card">
+                        <p>Name: ${form.name}</p>
+                        <p>Email: ${form.email}</p>
+                        <p>Phone: ${form.phone}</p>
+                        <p>Form: ${form.type}</p>
+                        <p>Reason: ${form.reason}</p>
+                        <p>Status: Submitted</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById("submittedForms").innerHTML =
+                html || "No forms submitted";
+        }
+
+        document.getElementById("studentForm").addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let phone = document.getElementById("phone").value.trim();
+            let type = document.getElementById("formType").value;
+            let reason = document.getElementById("reason").value.trim();
+
+            if (name === "" || email === "" || phone === "" ||
+                type === "" || reason === "") {
+
+                alert("Please fill all fields");
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert("Enter valid email");
+                return;
+            }
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert("Enter valid 10 digit mobile number");
+                return;
+            }
+
+            let form = {
+                name: name,
+                email: email,
+                phone: phone,
+                type: type,
+                reason: reason
+            };
+
+            forms.push(form);
+
+            localStorage.setItem("forms", JSON.stringify(forms));
+
+            document.getElementById("message").innerHTML =
+                "Form submitted successfully!";
+
+            document.getElementById("studentForm").reset();
+
+            displayForms();
+
+        });
+
+        displayForms();
+
+        showSection("profile");
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Examination System</title>
+</head>
+<body>
+
+    <h1>Online Examination System</h1>
+
+    <h3 id="timer">Time: 60 seconds</h3>
+
+    <div id="question"></div>
+
+    <br>
+
+    <button onclick="previous()">Previous</button>
+    <button onclick="next()">Next</button>
+
+    <h3>Question Navigation</h3>
+    <div id="navigation"></div>
+
+    <br>
+
+    <button onclick="submitExam()">Submit Exam</button>
+
+    <div id="result"></div>
+
+
+    <script>
+
+        // Questions
+        let questions = [
+            {
+                question: "What is JavaScript?",
+                options: ["Language", "Browser", "Database", "Computer"],
+                answer: 0
+            },
+            {
+                question: "Which keyword declares a variable?",
+                options: ["int", "let", "print", "echo"],
+                answer: 1
+            },
+            {
+                question: "Which method adds an element to an array?",
+                options: ["pop()", "push()", "shift()", "sort()"],
+                answer: 1
+            },
+            {
+                question: "Which symbol is used for comments?",
+                options: ["//", "#", "**", "@"],
+                answer: 0
+            },
+            {
+                question: "Which method displays an alert?",
+                options: ["print()", "show()", "alert()", "display()"],
+                answer: 2
+            }
+        ];
+
+        let current = 0;
+        let answers = [];
+        let time = 60;
+        let submitted = false;
+
+
+        // Random questions
+        questions.sort(() => Math.random() - 0.5);
+
+
+        // Display question
+        function showQuestion() {
+
+            let q = questions[current];
+
+            let html = "<h3>Question " + (current + 1) + "</h3>";
+
+            html += "<p>" + q.question + "</p>";
+
+            for (let i = 0; i < 4; i++) {
+
+                let checked = "";
+
+                if (answers[current] === i) {
+                    checked = "checked";
+                }
+
+                html += `
+                    <input type="radio" name="option"
+                    value="${i}" ${checked}
+                    onchange="saveAnswer(${i})">
+
+                    ${q.options[i]} <br><br>
+                `;
+            }
+
+            document.getElementById("question").innerHTML = html;
+
+            showNavigation();
+        }
+
+
+        // Save answer
+        function saveAnswer(value) {
+
+            answers[current] = value;
+
+            showNavigation();
+        }
+
+
+        // Next question
+        function next() {
+
+            if (current < questions.length - 1) {
+                current++;
+                showQuestion();
+            }
+        }
+
+
+        // Previous question
+        function previous() {
+
+            if (current > 0) {
+                current--;
+                showQuestion();
+            }
+        }
+
+
+        // Show question numbers
+        function showNavigation() {
+
+            let html = "";
+
+            for (let i = 0; i < questions.length; i++) {
+
+                if (answers[i] !== undefined) {
+                    html += `<button onclick="goTo(${i})">${i + 1} ✓</button> `;
+                }
+                else {
+                    html += `<button onclick="goTo(${i})">${i + 1}</button> `;
+                }
+            }
+
+            document.getElementById("navigation").innerHTML = html;
+        }
+
+
+        // Go to question
+        function goTo(index) {
+
+            current = index;
+            showQuestion();
+        }
+
+
+        // Timer
+        let timer = setInterval(function() {
+
+            time--;
+
+            document.getElementById("timer").innerHTML =
+                "Time: " + time + " seconds";
+
+            if (time <= 0) {
+                submitExam();
+            }
+
+        }, 1000);
+
+
+        // Submit exam
+        function submitExam() {
+
+            if (submitted) {
+                return;
+            }
+
+            submitted = true;
+
+            clearInterval(timer);
+
+            let correct = 0;
+            let wrong = 0;
+            let unanswered = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+
+                if (answers[i] === undefined) {
+                    unanswered++;
+                }
+                else if (answers[i] === questions[i].answer) {
+                    correct++;
+                }
+                else {
+                    wrong++;
+                }
+            }
+
+            // Negative marking
+            let marks = correct - (wrong * 0.25);
+
+            let percentage = (marks / questions.length) * 100;
+
+            // Display result
+            let html = "<h2>Examination Result</h2>";
+
+            html += "<p>Total Questions: " + questions.length + "</p>";
+            html += "<p>Correct Answers: " + correct + "</p>";
+            html += "<p>Wrong Answers: " + wrong + "</p>";
+            html += "<p>Unanswered: " + unanswered + "</p>";
+            html += "<p>Final Marks: " + marks.toFixed(2) + "</p>";
+            html += "<p>Percentage: " + percentage.toFixed(2) + "%</p>";
+
+            if (percentage >= 40) {
+                html += "<h3>Result: PASS</h3>";
+            }
+            else {
+                html += "<h3>Result: FAIL</h3>";
+            }
+
+            document.getElementById("question").innerHTML = "";
+            document.getElementById("navigation").innerHTML = "";
+            document.getElementById("timer").innerHTML = "Exam Completed";
+
+            document.getElementById("result").innerHTML = html;
+
+        }
+
+
+        // Start exam
+        showQuestion();
+
+    </script>
+
+</body>
+</html>

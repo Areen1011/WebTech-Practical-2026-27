@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real Time Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+    <h1>Real Time Chat Application</h1>
+
+    <input type="text" id="username" placeholder="Enter username">
+    <button onclick="joinChat()">Join Chat</button>
+
+    <h3>Online Users</h3>
+    <div id="users"></div>
+
+    <h3>Messages</h3>
+    <div id="messages"></div>
+
+    <p id="typing"></p>
+    <p id="unread">Unread Messages: 0</p>
+
+    <input type="text" id="message" placeholder="Enter message" disabled>
+    <button id="send" onclick="sendMessage()" disabled>Send</button>
+
+    <script>
+
+        let socket = io();
+
+        let name = "";
+        let unread = 0;
+        let timer;
+
+        function joinChat() {
+
+            name = document.getElementById("username").value.trim();
+
+            if (name === "") {
+                alert("Enter username");
+                return;
+            }
+
+            socket.emit("join", name);
+
+            document.getElementById("username").disabled = true;
+            document.getElementById("message").disabled = false;
+            document.getElementById("send").disabled = false;
+        }
+
+        function sendMessage() {
+
+            let msg = document.getElementById("message").value.trim();
+
+            if (msg === "") return;
+
+            socket.emit("sendMessage", msg);
+
+            document.getElementById("message").value = "";
+
+            socket.emit("stopTyping");
+        }
+
+        socket.on("receiveMessage", function(data) {
+
+            let div = document.createElement("p");
+
+            div.innerHTML = "<b>" + data.name + "</b>: " +
+                data.message + " <small>" + data.time + "</small>";
+
+            document.getElementById("messages").appendChild(div);
+
+            if (data.name !== name && document.hidden) {
+                unread++;
+
+                document.getElementById("unread").innerHTML =
+                    "Unread Messages: " + unread;
+            }
+        });
+
+        socket.on("users", function(users) {
+
+            let html = "";
+
+            for (let user of users) {
+                html += "<p>" + user.name + "</p>";
+            }
+
+            document.getElementById("users").innerHTML = html;
+        });
+
+        document.getElementById("message").addEventListener("input", function() {
+
+            socket.emit("typing", name);
+
+            clearTimeout(timer);
+
+            timer = setTimeout(function() {
+                socket.emit("stopTyping");
+            }, 1000);
+
+        });
+
+        socket.on("typing", function(user) {
+            document.getElementById("typing").innerHTML =
+                user + " is typing...";
+        });
+
+        socket.on("stopTyping", function() {
+            document.getElementById("typing").innerHTML = "";
+        });
+
+        document.getElementById("message").addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        document.addEventListener("visibilitychange", function() {
+
+            if (!document.hidden) {
+                unread = 0;
+
+                document.getElementById("unread").innerHTML =
+                    "Unread Messages: 0";
+            }
+        });
+
+    </script>
+
+</body>
+</html>

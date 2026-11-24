@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance System</title>
+</head>
+<body>
+
+    <h1>Student Performance Analytics</h1>
+
+    <label>Number of Students:</label>
+    <input type="number" id="count">
+
+    <button onclick="generateForm()">Generate</button>
+
+    <div id="form"></div>
+
+    <button onclick="calculate()">Calculate Results</button>
+
+    <div id="result"></div>
+
+    <script>
+
+        let students = [];
+
+        // Generate student input fields
+        function generateForm() {
+
+            let n = Number(document.getElementById("count").value);
+
+            let html = "";
+
+            for (let i = 0; i < n; i++) {
+
+                html += `<h3>Student ${i + 1}</h3>`;
+
+                html += `Name:
+                <input type="text" id="name${i}"><br>`;
+
+                html += `Java:
+                <input type="number" id="java${i}"><br>`;
+
+                html += `DBMS:
+                <input type="number" id="dbms${i}"><br>`;
+
+                html += `JavaScript:
+                <input type="number" id="js${i}"><br>`;
+            }
+
+            document.getElementById("form").innerHTML = html;
+        }
+
+
+        // Calculate student results
+        function calculate() {
+
+            let n = Number(document.getElementById("count").value);
+
+            students = [];
+
+            for (let i = 0; i < n; i++) {
+
+                let name = document.getElementById("name" + i).value;
+
+                let m1 = Number(document.getElementById("java" + i).value);
+                let m2 = Number(document.getElementById("dbms" + i).value);
+                let m3 = Number(document.getElementById("js" + i).value);
+
+                if (name.trim() === "" || m1 < 0 || m1 > 100 ||
+                    m2 < 0 || m2 > 100 || m3 < 0 || m3 > 100) {
+                    alert("Enter valid student details and marks.");
+                    return;
+                }
+
+                let total = m1 + m2 + m3;
+
+                let percentage = total / 3;
+
+                let status = "Pass";
+                let grade = "";
+
+                if (m1 < 35 || m2 < 35 || m3 < 35) {
+                    status = "Fail";
+                    grade = "F";
+                }
+                else if (percentage >= 90) {
+                    grade = "A+";
+                }
+                else if (percentage >= 75) {
+                    grade = "A";
+                }
+                else if (percentage >= 60) {
+                    grade = "B";
+                }
+                else if (percentage >= 50) {
+                    grade = "C";
+                }
+                else {
+                    grade = "D";
+                }
+
+                students.push({
+                    name: name,
+                    total: total,
+                    percentage: percentage,
+                    grade: grade,
+                    status: status
+                });
+            }
+
+            // Sort students by percentage
+            students.sort((a, b) => b.percentage - a.percentage);
+
+            // Calculate class average
+            let sum = 0;
+
+            for (let student of students) {
+                sum += student.percentage;
+            }
+
+            let average = sum / students.length;
+
+            // Display results
+            let html = "<h2>Student Results</h2>";
+
+            html += `
+                <table border="1" cellpadding="10">
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Total</th>
+                    <th>Percentage</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                </tr>
+            `;
+
+            for (let i = 0; i < students.length; i++) {
+
+                let s = students[i];
+
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${s.name}</td>
+                        <td>${s.total}</td>
+                        <td>${s.percentage.toFixed(2)}%</td>
+                        <td>${s.grade}</td>
+                        <td>${s.status}</td>
+                    </tr>
+                `;
+            }
+
+            html += "</table>";
+
+            html += `<h3>Class Average: ${average.toFixed(2)}%</h3>`;
+
+            html += `<h3>Topper: ${students[0].name}</h3>`;
+
+            document.getElementById("result").innerHTML = html;
+        }
+
+    </script>
+
+</body>
+</html>

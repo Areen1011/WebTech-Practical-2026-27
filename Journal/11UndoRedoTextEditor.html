@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Undo Redo Text Editor</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        textarea {
+            width: 90%;
+            height: 250px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        #history {
+            background: #eeeeee;
+            padding: 15px;
+            width: 90%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Undo Redo Text Editor</h1>
+
+    <textarea id="editor" placeholder="Start writing here..."></textarea>
+
+    <br><br>
+
+    <button onclick="undo()">Undo</button>
+    <button onclick="redo()">Redo</button>
+    <button onclick="clearText()">Clear</button>
+
+    <h3>Text Information</h3>
+
+    <p id="characters">Characters: 0</p>
+    <p id="words">Words: 0</p>
+
+    <h3>Action History</h3>
+
+    <div id="history"></div>
+
+    <script>
+
+        let editor = document.getElementById("editor");
+
+        let undoStack = [];
+        let redoStack = [];
+
+        let previousText = "";
+
+        function updateHistory() {
+
+            let html = "";
+
+            for (let i = 0; i < undoStack.length; i++) {
+                html += "<p>" + (i + 1) + ". " +
+                    undoStack[i] + "</p>";
+            }
+
+            document.getElementById("history").innerHTML =
+                html || "No history available";
+        }
+
+        editor.addEventListener("input", function() {
+
+            undoStack.push(previousText);
+
+            redoStack = [];
+
+            previousText = editor.value;
+
+            updateHistory();
+            updateCount();
+        });
+
+        function undo() {
+
+            if (undoStack.length > 0) {
+
+                redoStack.push(editor.value);
+
+                editor.value = undoStack.pop();
+
+                previousText = editor.value;
+
+                updateHistory();
+                updateCount();
+            }
+        }
+
+        function redo() {
+
+            if (redoStack.length > 0) {
+
+                undoStack.push(editor.value);
+
+                editor.value = redoStack.pop();
+
+                previousText = editor.value;
+
+                updateHistory();
+                updateCount();
+            }
+        }
+
+        function clearText() {
+
+            if (editor.value !== "") {
+
+                undoStack.push(editor.value);
+
+                editor.value = "";
+
+                redoStack = [];
+
+                previousText = "";
+
+                updateHistory();
+                updateCount();
+            }
+        }
+
+        function updateCount() {
+
+            let text = editor.value;
+
+            document.getElementById("characters").innerHTML =
+                "Characters: " + text.length;
+
+            let words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+
+            document.getElementById("words").innerHTML =
+                "Words: " + words;
+        }
+
+        editor.addEventListener("keydown", function(event) {
+
+            if (event.ctrlKey && event.key.toLowerCase() === "z") {
+
+                event.preventDefault();
+                undo();
+            }
+
+            if (event.ctrlKey && event.key.toLowerCase() === "y") {
+
+                event.preventDefault();
+                redo();
+            }
+        });
+
+        previousText = editor.value;
+
+    </script>
+
+</body>
+</html>
+

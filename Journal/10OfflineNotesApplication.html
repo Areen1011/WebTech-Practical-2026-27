@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Offline Notes Application</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+            background: #f2f2f2;
+        }
+
+        input, textarea, select, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        textarea {
+            width: 300px;
+            height: 100px;
+        }
+
+        .note {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Offline Notes Application</h1>
+
+    <h3>Create Note</h3>
+
+    <input type="text" id="title" placeholder="Note Title">
+    <br>
+
+    <textarea id="content" placeholder="Write your note"></textarea>
+    <br>
+
+    <select id="category">
+        <option>Personal</option>
+        <option>Study</option>
+        <option>Work</option>
+        <option>Other</option>
+    </select>
+
+    <button id="saveButton" onclick="saveNote()">Add Note</button>
+
+    <h3>Search Notes</h3>
+
+    <input type="text" id="search" placeholder="Search notes" oninput="displayNotes()">
+
+    <select id="filter" onchange="displayNotes()">
+        <option>All</option>
+        <option>Personal</option>
+        <option>Study</option>
+        <option>Work</option>
+        <option>Other</option>
+    </select>
+
+    <h2>My Notes</h2>
+
+    <div id="notes"></div>
+
+    <script>
+
+        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+        let editId = null;
+
+        function saveNote() {
+
+            let title = document.getElementById("title").value;
+            let content = document.getElementById("content").value;
+            let category = document.getElementById("category").value;
+
+            if (title === "" || content === "") {
+                alert("Enter title and content");
+                return;
+            }
+
+            if (editId === null) {
+
+                let note = {
+                    id: Date.now(),
+                    title: title,
+                    content: content,
+                    category: category
+                };
+
+                notes.push(note);
+
+            } else {
+
+                let note = notes.find(n => n.id === editId);
+
+                note.title = title;
+                note.content = content;
+                note.category = category;
+
+                editId = null;
+
+                document.getElementById("saveButton").innerHTML = "Add Note";
+            }
+
+            localStorage.setItem("notes", JSON.stringify(notes));
+
+            document.getElementById("title").value = "";
+            document.getElementById("content").value = "";
+
+            displayNotes();
+        }
+
+        function displayNotes() {
+
+            let search = document.getElementById("search").value.toLowerCase();
+            let filter = document.getElementById("filter").value;
+
+            let html = "";
+
+            for (let note of notes) {
+
+                if (!note.title.toLowerCase().includes(search) &&
+                    !note.content.toLowerCase().includes(search)) {
+                    continue;
+                }
+
+                if (filter !== "All" && note.category !== filter) {
+                    continue;
+                }
+
+                html += `
+                    <div class="note">
+                        <h3>${escapeHTML(note.title)}</h3>
+                        <p>${escapeHTML(note.content)}</p>
+                        <p>Category: ${escapeHTML(note.category)}</p>
+
+                        <button onclick="editNote(${note.id})">Edit</button>
+                        <button onclick="deleteNote(${note.id})">Delete</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById("notes").innerHTML =
+                html || "No notes found";
+        }
+
+        function editNote(id) {
+
+            let note = notes.find(n => n.id === id);
+
+            document.getElementById("title").value = note.title;
+            document.getElementById("content").value = note.content;
+            document.getElementById("category").value = note.category;
+
+            editId = id;
+
+            document.getElementById("saveButton").innerHTML = "Update Note";
+        }
+
+        function deleteNote(id) {
+
+            notes = notes.filter(n => n.id !== id);
+
+            localStorage.setItem("notes", JSON.stringify(notes));
+
+            displayNotes();
+        }
+
+        function escapeHTML(value) {
+            return value.replace(/[&<>"']/g, function(char) {
+                return {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                }[char];
+            });
+        }
+
+        displayNotes();
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js")
+                .then(() => console.log("Offline support enabled"))
+                .catch(error => console.log("Service Worker Error:", error));
+        }
+
+    </script>
+
+</body>
+</html>

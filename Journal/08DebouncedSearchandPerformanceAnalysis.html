@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debounced Search</title>
+</head>
+<body>
+
+    <h1>Debounced Search and Performance Analysis</h1>
+
+    <h3>Basic Search</h3>
+    <input type="text" id="basicSearch" placeholder="Search records">
+    <p id="basicTime">Search Time: 0 ms</p>
+    <div id="basicResult"></div>
+
+    <hr>
+
+    <h3>Debounced Search</h3>
+    <input type="text" id="debounceSearch" placeholder="Search records">
+    <p id="debounceTime">Search Time: 0 ms</p>
+    <div id="debounceResult"></div>
+
+    <script>
+
+        let records = [];
+
+        for (let i = 1; i <= 10000; i++) {
+            records.push({
+                id: i,
+                name: "Student " + i,
+                email: "student" + i + "@gmail.com"
+            });
+        }
+
+        function searchRecords(value) {
+
+            let start = performance.now();
+
+            let result = records.filter(record =>
+                record.name.toLowerCase().includes(value.toLowerCase())
+            );
+
+            let end = performance.now();
+
+            return {
+                result: result,
+                time: (end - start).toFixed(2)
+            };
+        }
+
+        document.getElementById("basicSearch").addEventListener("input", function() {
+
+            let value = this.value;
+
+            let data = searchRecords(value);
+
+            document.getElementById("basicTime").innerHTML =
+                "Search Time: " + data.time + " ms";
+
+            displayResult(data.result, "basicResult");
+        });
+
+        let timer;
+
+        document.getElementById("debounceSearch").addEventListener("input", function() {
+
+            clearTimeout(timer);
+
+            timer = setTimeout(function() {
+
+                let value = document.getElementById("debounceSearch").value;
+
+                let data = searchRecords(value);
+
+                document.getElementById("debounceTime").innerHTML =
+                    "Search Time: " + data.time + " ms";
+
+                displayResult(data.result, "debounceResult");
+
+            }, 500);
+
+        });
+
+        function displayResult(data, elementId) {
+
+            let html = "";
+
+            for (let i = 0; i < Math.min(data.length, 10); i++) {
+
+                html += "<p>" +
+                    data[i].id + " - " +
+                    data[i].name + " - " +
+                    data[i].email +
+                    "</p>";
+            }
+
+            document.getElementById(elementId).innerHTML =
+                html || "No records found";
+        }
+
+    </script>
+
+</body>
+</html>
